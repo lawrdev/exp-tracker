@@ -1,12 +1,50 @@
+<script setup lang="ts">
+import { reactive, defineEmits } from 'vue'
+import { useToast } from 'vue-toastification'
+
+const toast = useToast()
+
+const formVlaues = reactive<{
+  title: string
+  amount?: number
+  description: string
+}>({
+  title: '',
+  description: ''
+})
+
+const emit = defineEmits(['transactionCreated'])
+
+const onSubmit = () => {
+  if (!formVlaues.amount || !formVlaues.title) {
+    toast.error('Fields are missing!')
+    return
+  }
+
+  const newTransaction = {
+    amount: formVlaues.amount,
+    description: formVlaues.description,
+    title: formVlaues.title
+  }
+
+  emit('transactionCreated', newTransaction)
+
+  formVlaues.amount = undefined
+  formVlaues.title = ''
+  formVlaues.description = ''
+}
+</script>
+
 <template>
   <div>
     <h3 style="margin-bottom: 6px">Add a Transaction</h3>
 
     <div class="form-container">
-      <form class="form" id="addTransactionForm">
+      <form class="form" id="addTransactionForm" @submit.prevent="onSubmit">
         <div class="form-group">
           <label for="title">Title</label>
           <input
+            v-model="formVlaues.title"
             type="text"
             id="title"
             name="title"
@@ -17,6 +55,7 @@
         <div class="form-group">
           <label for="description">Add a description (optional)</label>
           <textarea
+            v-model="formVlaues.description"
             name="description"
             id="description"
             rows="3"
@@ -26,7 +65,14 @@
 
         <div class="form-group">
           <label for="amount">Amount <span>(negative - expense, positive - income)</span></label>
-          <input type="number" id="amount" name="amount" placeholder="-70.50" :required="true" />
+          <input
+            v-model="formVlaues.amount"
+            type="number"
+            id="amount"
+            name="amount"
+            placeholder="-70.50"
+            :required="true"
+          />
         </div>
 
         <button type="submit" class="tr-btn">Add Transaction</button>
@@ -68,7 +114,7 @@ textarea:focus {
     linear-gradient(#181818, #181818) padding-box,
     linear-gradient(108deg, transparent 80%, #e81cff, #40c9ff) border-box;
   border: 2px solid transparent;
-  padding: 12px 20px 62px 0px;
+  padding: 12px 24px 62px 0px;
   display: flex;
   flex-direction: column;
   border-radius: 24px;
@@ -103,15 +149,15 @@ label span {
   font-size: 12px;
   padding: 14px 32px;
   width: 100%;
-  max-width: fit-content;
-  margin: 18px 0px 10px;
+  max-width: 170px;
+  margin: 14px 0px 10px;
   border: none;
   outline: none;
   border-radius: var(--border-radius-md);
   cursor: pointer;
   /* text-transform: uppercase; */
   border: 1px solid #414141;
-  background-color: var(--vt-c-black);
+  background-color: var(--vt-c-black-mute);
   color: var(--vt-c-text-dark-2);
   font-weight: 500;
   transition: 0.6s;

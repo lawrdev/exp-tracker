@@ -12,8 +12,9 @@ import IconGithubVue from './icons/IconGithub.vue'
 
 <style scoped>
 footer {
+  margin-top: 10vh;
   border-top: 1px solid var(--vt-c-divider-dark-1);
-  padding: 20px 20px 32px;
+  padding: 20px 20px 20px;
 }
 a {
   font-weight: 400;

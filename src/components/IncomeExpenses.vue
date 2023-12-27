@@ -1,16 +1,21 @@
 <script setup lang="ts">
 import { formatPrice } from '@/helpers/functions'
+import { defineProps } from 'vue'
+
+const { values } = defineProps<{
+  values: { incomes: number; expenses: number }
+}>()
 </script>
 
 <template>
   <div class="income-expense inverse-color">
     <div>
       <h4>Income</h4>
-      <p id="money-plus" class="money plus">+{{ formatPrice(0) }}</p>
+      <p id="money-plus" class="money plus">+{{ formatPrice(values.incomes) }}</p>
     </div>
     <div>
       <h4>Expense</h4>
-      <p id="money-minus" class="money minus">-{{ formatPrice(0) }}</p>
+      <p id="money-minus" class="money minus">{{ formatPrice(values.expenses) }}</p>
     </div>
   </div>
 </template>
